@@ -18,6 +18,10 @@
 		77B272D414FC1158000E1557 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77B272BB14FC1158000E1557 /* Foundation.framework */; };
 		77B272DC14FC1158000E1557 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 77B272DA14FC1158000E1557 /* InfoPlist.strings */; };
 		77B272DF14FC1158000E1557 /* GDI_InfiniteScrollViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B272DE14FC1158000E1557 /* GDI_InfiniteScrollViewTests.m */; };
+		77B272EC14FC11E7000E1557 /* DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B272EA14FC11E7000E1557 /* DemoViewController.m */; };
+		77B272ED14FC11E7000E1557 /* DemoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77B272EB14FC11E7000E1557 /* DemoView.xib */; };
+		77B272F014FC1235000E1557 /* GDIInfiniteScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B272EF14FC1235000E1557 /* GDIInfiniteScrollView.m */; };
+		77B272F614FC2331000E1557 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77B272F514FC2331000E1557 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +51,12 @@
 		77B272DB14FC1158000E1557 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		77B272DD14FC1158000E1557 /* GDI_InfiniteScrollViewTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GDI_InfiniteScrollViewTests.h; sourceTree = "<group>"; };
 		77B272DE14FC1158000E1557 /* GDI_InfiniteScrollViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GDI_InfiniteScrollViewTests.m; sourceTree = "<group>"; };
+		77B272E914FC11E7000E1557 /* DemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoViewController.h; sourceTree = "<group>"; };
+		77B272EA14FC11E7000E1557 /* DemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoViewController.m; sourceTree = "<group>"; };
+		77B272EB14FC11E7000E1557 /* DemoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoView.xib; sourceTree = "<group>"; };
+		77B272EE14FC1235000E1557 /* GDIInfiniteScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDIInfiniteScrollView.h; sourceTree = "<group>"; };
+		77B272EF14FC1235000E1557 /* GDIInfiniteScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDIInfiniteScrollView.m; sourceTree = "<group>"; };
+		77B272F514FC2331000E1557 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77B272F614FC2331000E1557 /* QuartzCore.framework in Frameworks */,
 				77B272BA14FC1158000E1557 /* UIKit.framework in Frameworks */,
 				77B272BC14FC1158000E1557 /* Foundation.framework in Frameworks */,
 				77B272BE14FC1158000E1557 /* CoreGraphics.framework in Frameworks */,
@@ -95,6 +106,7 @@
 		77B272B814FC1158000E1557 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				77B272F514FC2331000E1557 /* QuartzCore.framework */,
 				77B272B914FC1158000E1557 /* UIKit.framework */,
 				77B272BB14FC1158000E1557 /* Foundation.framework */,
 				77B272BD14FC1158000E1557 /* CoreGraphics.framework */,
@@ -106,9 +118,13 @@
 		77B272BF14FC1158000E1557 /* GDI-InfiniteScrollView */ = {
 			isa = PBXGroup;
 			children = (
+				77B272E814FC11CE000E1557 /* GDI Infinite Scroll View */,
 				77B272C814FC1158000E1557 /* GDIAppDelegate.h */,
 				77B272C914FC1158000E1557 /* GDIAppDelegate.m */,
 				77B272C014FC1158000E1557 /* Supporting Files */,
+				77B272E914FC11E7000E1557 /* DemoViewController.h */,
+				77B272EA14FC11E7000E1557 /* DemoViewController.m */,
+				77B272EB14FC11E7000E1557 /* DemoView.xib */,
 			);
 			path = "GDI-InfiniteScrollView";
 			sourceTree = "<group>";
@@ -141,6 +157,15 @@
 				77B272DA14FC1158000E1557 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		77B272E814FC11CE000E1557 /* GDI Infinite Scroll View */ = {
+			isa = PBXGroup;
+			children = (
+				77B272EE14FC1235000E1557 /* GDIInfiniteScrollView.h */,
+				77B272EF14FC1235000E1557 /* GDIInfiniteScrollView.m */,
+			);
+			name = "GDI Infinite Scroll View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,6 +239,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				77B272C414FC1158000E1557 /* InfoPlist.strings in Resources */,
+				77B272ED14FC11E7000E1557 /* DemoView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,6 +276,8 @@
 			files = (
 				77B272C614FC1158000E1557 /* main.m in Sources */,
 				77B272CA14FC1158000E1557 /* GDIAppDelegate.m in Sources */,
+				77B272EC14FC11E7000E1557 /* DemoViewController.m in Sources */,
+				77B272F014FC1235000E1557 /* GDIInfiniteScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

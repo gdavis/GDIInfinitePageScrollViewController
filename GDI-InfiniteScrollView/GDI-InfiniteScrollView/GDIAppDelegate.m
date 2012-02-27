@@ -7,15 +7,25 @@
 //
 
 #import "GDIAppDelegate.h"
+#import "DemoViewController.h"
+
+@interface GDIAppDelegate()
+@property (strong, nonatomic) DemoViewController *demoVC;
+@end
 
 @implementation GDIAppDelegate
 
 @synthesize window = _window;
+@synthesize demoVC = _demoVC;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    _demoVC = [[DemoViewController alloc] initWithNibName:@"DemoView" bundle:nil];
+    self.window.rootViewController = _demoVC;
+    [self.window addSubview:_demoVC.view];
+    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
