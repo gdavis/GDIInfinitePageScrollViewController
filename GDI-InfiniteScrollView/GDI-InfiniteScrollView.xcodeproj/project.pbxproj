@@ -22,6 +22,8 @@
 		77B272ED14FC11E7000E1557 /* DemoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77B272EB14FC11E7000E1557 /* DemoView.xib */; };
 		77B272F014FC1235000E1557 /* GDIInfiniteScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B272EF14FC1235000E1557 /* GDIInfiniteScrollView.m */; };
 		77B272F614FC2331000E1557 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77B272F514FC2331000E1557 /* QuartzCore.framework */; };
+		77B272FA14FC3014000E1557 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B272F814FC3013000E1557 /* ContentViewController.m */; };
+		77B272FB14FC3014000E1557 /* ContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77B272F914FC3013000E1557 /* ContentViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,9 @@
 		77B272EE14FC1235000E1557 /* GDIInfiniteScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDIInfiniteScrollView.h; sourceTree = "<group>"; };
 		77B272EF14FC1235000E1557 /* GDIInfiniteScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDIInfiniteScrollView.m; sourceTree = "<group>"; };
 		77B272F514FC2331000E1557 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		77B272F714FC3013000E1557 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
+		77B272F814FC3013000E1557 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
+		77B272F914FC3013000E1557 /* ContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContentViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +130,9 @@
 				77B272E914FC11E7000E1557 /* DemoViewController.h */,
 				77B272EA14FC11E7000E1557 /* DemoViewController.m */,
 				77B272EB14FC11E7000E1557 /* DemoView.xib */,
+				77B272F714FC3013000E1557 /* ContentViewController.h */,
+				77B272F814FC3013000E1557 /* ContentViewController.m */,
+				77B272F914FC3013000E1557 /* ContentViewController.xib */,
 			);
 			path = "GDI-InfiniteScrollView";
 			sourceTree = "<group>";
@@ -240,6 +248,7 @@
 			files = (
 				77B272C414FC1158000E1557 /* InfoPlist.strings in Resources */,
 				77B272ED14FC11E7000E1557 /* DemoView.xib in Resources */,
+				77B272FB14FC3014000E1557 /* ContentViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +287,7 @@
 				77B272CA14FC1158000E1557 /* GDIAppDelegate.m in Sources */,
 				77B272EC14FC11E7000E1557 /* DemoViewController.m in Sources */,
 				77B272F014FC1235000E1557 /* GDIInfiniteScrollView.m in Sources */,
+				77B272FA14FC3014000E1557 /* ContentViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

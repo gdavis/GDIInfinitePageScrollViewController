@@ -9,42 +9,30 @@
 #import "GDIInfiniteScrollView.h"
 
 @interface GDIInfiniteScrollView()
-@property (nonatomic) NSUInteger numberOfPages;
-@property (nonatomic) NSUInteger maxNumberOfViewablePages;
-@property (strong, nonatomic) NSMutableArray *viewControllers;
-@property (strong, nonatomic) NSMutableArray *undistributedViewPositions;
-@property (nonatomic) CGPoint lastTouchPoint;
-@property (nonatomic) CGFloat velocity;
-@property (nonatomic) NSUInteger leftIndex;
-@property (nonatomic) NSUInteger rightIndex;
-@property (strong, nonatomic) NSMutableArray *visiblePages;
+@property (nonatomic) NSUInteger prevIndex;
+@property (nonatomic) CGFloat actualContentWidth;
 
-- (void)setDefaults;
-- (void)setDataSourceProperties;
-- (void)buildVisiblePages;
+- (void)initialize;
+- (void)updateContentSize;
+- (void)updateCurrentViewController;
+- (void)updateCurrentIndex;
+- (void)initFirstViewController;
+- (void)initLastViewController;
+- (void)loadPrevViewController;
+- (void)loadNextViewController;
+- (void)resetScrollToBeginning;
+- (void)resetScrollToEnd;
 
-- (void)trackTouch:(UITouch *)touch;
-- (void)scrollViewByValue:(CGFloat)value;
-- (void)distributeViews;
 @end
 
 @implementation GDIInfiniteScrollView
-@synthesize delegate;
-@synthesize dataSource;
-@synthesize currentIndex;
-@synthesize decelerationRate;
-@synthesize distributionMethod;
-@synthesize contentSize;
 
-@synthesize numberOfPages = _numberOfPages;
-@synthesize maxNumberOfViewablePages = _maxNumberOfViewablePages;
+@synthesize currentIndex;
+
+@synthesize prevIndex = _prevIndex;
 @synthesize viewControllers = _viewControllers;
-@synthesize undistributedViewPositions = _undistributedViewPositions;
-@synthesize lastTouchPoint = _lastTouchPoint;
-@synthesize velocity = _velocity;
-@synthesize leftIndex = _leftIndex;
-@synthesize rightIndex = _rightIndex;
-@synthesize visiblePages = _visiblePages;
+@synthesize actualContentWidth = _actualContentWidth;
+
 
 #pragma mark - Initialization
 
@@ -52,7 +40,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self setDefaults];
+        [self initialize];
     }
     return self;
 }
@@ -61,167 +49,171 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setDefaults];
+        [self initialize];
     }
     return self;
 }
 
-- (void)setDataSource:(NSObject<GDIInfiniteScrollViewDataSource> *)newDataSource
+- (id)initWithFrame:(CGRect)frame viewControllers:(NSArray *)viewControllers
 {
-    dataSource = newDataSource;
-    if (dataSource) {
-        [self setDataSourceProperties];
-        [self buildVisiblePages];
-        [self distributeViews];
+    self = [self initWithFrame:frame];
+    if (self) {
+        _viewControllers = [NSMutableArray arrayWithArray:viewControllers];
+        [self updateContentSize];
     }
+    return self;
 }
 
-- (void)setDefaults
+- (void)initialize
 {
-    decelerationRate = .95f;
-    distributionMethod = GDIInfiniteScrollViewDistributionMethodEqual;
-    contentSize = self.frame.size;
-    
+    self.delegate = self;
+    super.pagingEnabled = YES;
     _viewControllers = [NSMutableArray array];
-    _undistributedViewPositions = [NSMutableArray array];
-    _visiblePages = [NSMutableArray array];
 }
 
-- (void)setDataSourceProperties
+- (void)setPagingEnabled:(BOOL)pagingEnabled
 {
+    // don't allow anything but paging.
+    [super setPagingEnabled:YES];
+}
+
+- (void)setViewControllers:(NSMutableArray *)viewControllers
+{
+    _viewControllers = [NSMutableArray arrayWithArray:viewControllers];
     currentIndex = 0;
     
-    _numberOfPages = [dataSource numberOfPagesForInfiniteScrollView:self];
-    _maxNumberOfViewablePages = [dataSource maxNumberOfViewablePagesForInfiniteScrollView:self];
-}
-
-#pragma mark - Adding View Controllers
-
-- (void)addViewController:(UIViewController *)viewController
-{
-    [_viewControllers addObject:viewController];
-}
-
-#pragma mark - Build Methods
-
-- (void)buildVisiblePages
-{
-    CGFloat dx = 0;
-    for (int i=0; i < _numberOfPages && i < _maxNumberOfViewablePages; i++) {
-        UIView *view = [dataSource viewForInfiniteScrollView:self atIndex:i];
-        
-        // store the position of this view as if it were directly next to the previous view.
-        [self.undistributedViewPositions addObject:[NSNumber numberWithFloat:dx]];
-        
-        [self.visiblePages addObject:view];
-        [self addSubview:view];
-        
-        dx += view.frame.size.width;
-    }
-}
-
-
-#pragma mark - Scrolling
-
-- (void)trackTouch:(UITouch *)touch
-{
-    CGPoint curTouchLoc = [touch locationInView:self];
-    _velocity = curTouchLoc.x - _lastTouchPoint.x;
+    [self updateContentSize];
+    [self initFirstViewController];
     
-    [self scrollViewByValue:_velocity];
-    
-    _lastTouchPoint = curTouchLoc;
-    NSLog(@"track touch lastLoc: %@, curLoc: %@, velocity: %.2f", NSStringFromCGPoint(_lastTouchPoint), NSStringFromCGPoint(curTouchLoc), _velocity);
+    // center the scroll view on the first index.
+    self.contentOffset = CGPointMake(self.frame.size.width, 0);
 }
 
-- (void)scrollViewByValue:(CGFloat)value
+#pragma mark - View Controller Management
+
+- (void)updateContentSize
 {
-    // manipulate the undistributed position values by the scroll value.
-    for (int i=0; i < self.undistributedViewPositions.count; i++) {
-        NSNumber *position = [self.undistributedViewPositions objectAtIndex:i];
-        [self.undistributedViewPositions replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:[position floatValue] + value]];
-    }
+    // the content size is extended beyond the size actually needed to display all the added view controllers.
+    // we add the size of two extra pages, one for the front of the scrollview, the other for the end, to create
+    // the seamless tiling effect. for example, with 10 pages, the index values would look like:
+    // 9, 0, 1 ... 8, 9, 0
     
-    /*
-    // remove views that have gone too far left
-    CGFloat firstViewFrameRight = FLT_MIN;
-    while(firstViewFrameRight < 0) {
-        NSNumber *firstViewPosition = [self.undistributedViewPositions objectAtIndex:0];
-        UIView *view = [self.visiblePages objectAtIndex:0];
-        firstViewFrameRight = [firstViewPosition floatValue] + view.frame.size.width;
-        
-        if (firstViewFrameRight < 0) {
-            [view removeFromSuperview];
-            [self.undistributedViewPositions removeObjectAtIndex:0];
-            [self.visiblePages removeObjectAtIndex:0];
-        }
+    CGFloat wv = (self.viewControllers.count + 2) * self.frame.size.width;
+    self.contentSize = CGSizeMake(wv, self.frame.size.height);
+    self.actualContentWidth = self.viewControllers.count * self.frame.size.width;
+}
+
+
+- (void)initFirstViewController
+{
+    UIViewController *viewController = [_viewControllers objectAtIndex:0];
+    [self addSubview:viewController.view];
+    viewController.view.frame = CGRectMake(self.frame.size.width, 0, self.frame.size.width, self.contentSize.height);
+    
+    [self loadPrevViewController];
+    [self loadNextViewController];
+}
+
+- (void)initLastViewController
+{
+    UIViewController *viewController = [_viewControllers lastObject];
+    [self addSubview:viewController.view];
+    viewController.view.frame = CGRectMake(self.frame.size.width * _viewControllers.count, 0, self.frame.size.width, self.contentSize.height);
+    
+    [self loadPrevViewController];
+    [self loadNextViewController];
+}
+
+- (void)updateCurrentViewController
+{   
+    // determine which direction we are moving in, and build the upcoming view controller for that direction.
+    if (self.currentIndex < self.prevIndex) {
+        // moving left, backwards
+        [self loadPrevViewController];
     }
     
-    // remove views that have gone too far right
-    CGFloat lastViewFrameLeft = FLT_MAX;
-    while (lastViewFrameLeft > self.frame.size.width) {
-        NSNumber *lastViewPosition = [self.undistributedViewPositions lastObject];
-        UIView *view = [self.visiblePages lastObject];
-        lastViewFrameLeft = [lastViewPosition floatValue] + view.frame.size.width;
-        
-        if (lastViewFrameLeft > self.frame.size.width) {
-            [view removeFromSuperview];
-            [self.undistributedViewPositions removeLastObject];
-            [self.visiblePages removeLastObject];
-        }
+    if (self.currentIndex > self.prevIndex) {
+        // moving right, forwards
+        [self loadNextViewController];
     }
-    */
-    // add views 
 }
 
-- (void)distributeViews
+
+- (void)loadPrevViewController
 {
-    // add up the width of all the displayed cells
-    CGFloat totalWidth = 0;
-    for (UIView *view in self.visiblePages) {
-        totalWidth += view.frame.size.width;
+    UIViewController *currentVC = [self.viewControllers objectAtIndex:self.currentIndex];
+    NSInteger prevIndex = self.currentIndex-1;
+    if (prevIndex < 0) {
+        prevIndex = self.viewControllers.count-1;
+    }
+    NSLog(@"loading prev vc, current index: %i, prev index: %i", self.currentIndex, prevIndex);
+    UIViewController *viewController = [self.viewControllers objectAtIndex:prevIndex];
+    [self addSubview:viewController.view];
+    viewController.view.frame = CGRectMake(currentVC.view.frame.origin.x - self.frame.size.width, 0, self.frame.size.width, self.frame.size.height);
+}
+
+
+- (void)loadNextViewController
+{
+    UIViewController *currentVC = [self.viewControllers objectAtIndex:self.currentIndex];
+    // moving right, forwards
+    NSInteger nextIndex = self.currentIndex+1;
+    if (nextIndex >= self.viewControllers.count) {
+        nextIndex = 0;
+    }
+    NSLog(@"loading next vc, current index: %i, next index: %i", self.currentIndex, nextIndex);
+    UIViewController *viewController = [self.viewControllers objectAtIndex:nextIndex];
+    [self addSubview:viewController.view];
+    viewController.view.frame = CGRectMake(currentVC.view.frame.origin.x + self.frame.size.width, 0, self.frame.size.width, self.frame.size.height);
+}
+
+
+- (void)updateCurrentIndex
+{
+    // calculate the current index and account for the extra page spaces we've added for infinite scrolling
+    NSInteger index = fmodf(roundf((self.contentOffset.x - self.frame.size.width) / self.frame.size.width), self.viewControllers.count);
+    if (index < 0) {
+        index = self.viewControllers.count-1;
     }
     
-    // distribute views equally
-    if (self.distributionMethod == GDIInfiniteScrollViewDistributionMethodEqual) {
-        CGFloat dx = self.frame.size.width / self.visiblePages.count;
-        
-        for (int i=0; i<self.visiblePages.count; i++) {
-            NSNumber *position = [self.undistributedViewPositions objectAtIndex:i];
-            UIView *view = [self.visiblePages objectAtIndex:i];
-            
-            CGFloat viewX = (dx * i) + dx * .5 - view.frame.size.width * .5;
-            
-            view.frame = CGRectMake(viewX, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
-        }
-    }
+    self.currentIndex = index;
 }
 
-#pragma mark - Touch Handling
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)setCurrentIndex:(NSUInteger)newIndex
 {
-    if (touches.count == 1) {
-        UITouch *touch = [touches anyObject];
-        
-        _lastTouchPoint = [touch locationInView:self];
-        _velocity = 0;
-        
-        [self trackTouch:touch];
+    if (currentIndex == newIndex) {
+        return;
     }
+    _prevIndex = currentIndex;
+    currentIndex = newIndex;
+    [self updateCurrentViewController];
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)resetScrollToBeginning
 {
-    if (touches.count == 1) {
-        UITouch *touch = [touches anyObject];
-        [self trackTouch:touch];
-    }
+    [self scrollRectToVisible:CGRectMake(self.frame.size.width, 0, self.frame.size.width, self.frame.size.height) animated:NO];
+    [self initFirstViewController];
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)resetScrollToEnd
 {
+    [self scrollRectToVisible:CGRectMake(self.viewControllers.count * self.frame.size.width, 0, self.frame.size.width, self.frame.size.height) animated:NO];
+    [self initLastViewController];
+}
+
+#pragma mark - UIScrollViewDelegate Methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{    
+    NSLog(@"offset x: %.2f", self.contentOffset.x);
+    [self updateCurrentIndex];
     
+    if (self.contentOffset.x <= 0) {
+        [self resetScrollToEnd];
+    }
+    if (self.contentOffset.x >= (self.viewControllers.count+1) * self.frame.size.width) {
+        [self resetScrollToBeginning];
+    }
 }
 
 

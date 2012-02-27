@@ -8,6 +8,7 @@
 
 #import "DemoViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ContentViewController.h"
 
 @implementation DemoViewController
 @synthesize infiniteScrollView;
@@ -24,9 +25,7 @@
 - (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
+    [super didReceiveMemoryWarning];    
 }
 
 #pragma mark - View lifecycle
@@ -34,9 +33,26 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
-    self.infiniteScrollView.dataSource = self;
+    ContentViewController *pageOneVC = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:nil];
+    ContentViewController *pageTwoVC = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:nil];
+    ContentViewController *pageThreeVC = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:nil];
+    ContentViewController *pageFourVC = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:nil];
+    ContentViewController *pageFiveVC = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:nil];
+    
+    [pageOneVC view];
+    [pageTwoVC view];
+    [pageThreeVC view];
+    [pageFourVC view];
+    [pageFiveVC view];
+    
+    pageOneVC.viewLabel.text = @"0";
+    pageTwoVC.viewLabel.text = @"1";
+    pageThreeVC.viewLabel.text = @"2";
+    pageFourVC.viewLabel.text = @"3";
+    pageFiveVC.viewLabel.text = @"4";
+    
+    self.infiniteScrollView.viewControllers = [NSMutableArray arrayWithObjects:pageOneVC, pageTwoVC, pageThreeVC, pageFourVC, pageFiveVC, nil];
 }
 
 - (void)viewDidUnload
