@@ -24,4 +24,5 @@
 
 
 @protocol GDIInfiniteScrollViewControllerDelegate
+- (void)infiniteScrollViewDidScrollToIndex:(NSUInteger)index;
 @end

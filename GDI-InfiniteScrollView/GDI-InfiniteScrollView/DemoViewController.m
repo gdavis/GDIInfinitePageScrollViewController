@@ -48,11 +48,11 @@
     pageFiveVC.labelText = @"4";
     
     infiniteScrollerVC = [[GDIInfiniteScrollViewController alloc] initWithViewControllers:[NSArray arrayWithObjects:pageOneVC, pageTwoVC, pageThreeVC, pageFourVC, pageFiveVC, nil]];
-    
+
+    infiniteScrollerVC.delegate = self;
     [self.infiniteScrollViewContainer addSubview:infiniteScrollerVC.view];
     self.infiniteScrollerVC.view.frame = self.infiniteScrollViewContainer.bounds;
-    
-//    [infiniteScrollerVC setCurrentIndex:2 animation:NO];
+
 }
 
 - (void)viewDidUnload
@@ -61,5 +61,10 @@
     [super viewDidUnload];
 }
 
+
+- (void)infiniteScrollViewDidScrollToIndex:(NSUInteger)index
+{
+    NSLog(@"infiniteScrollViewDidScrollToIndex: %i", index);
+}
 
 @end
