@@ -125,16 +125,27 @@
 }
 
 - (void)updateCurrentViewController
-{   
-    // determine which direction we are moving in, and build the upcoming view controller for that direction.
-    if (self.currentIndex < self.prevIndex) {
-        // moving left, backwards
-        [self loadPrevViewController];
+{
+    NSInteger delta = self.currentIndex - self.prevIndex;
+    if (abs(delta) > 1) {
+        if (delta < 0) {
+            [self resetScrollToBeginning];
+        }
+        else {
+            [self resetScrollToEnd];
+        }
     }
-    
-    if (self.currentIndex > self.prevIndex) {
-        // moving right, forwards
-        [self loadNextViewController];
+    else {
+        // determine which direction we are moving in, and build the upcoming view controller for that direction.
+        if (self.currentIndex < self.prevIndex) {
+            // moving left, backwards
+            [self loadPrevViewController];
+        }
+        
+        if (self.currentIndex > self.prevIndex) {
+            // moving right, forwards
+            [self loadNextViewController];
+        }
     }
 }
 
@@ -146,7 +157,7 @@
     if (prevIndex < 0) {
         prevIndex = self.viewControllers.count-1;
     }
-    NSLog(@"loading prev vc, current index: %i, prev index: %i", self.currentIndex, prevIndex);
+//    NSLog(@"loading prev vc, current index: %i, prev index: %i", self.currentIndex, prevIndex);
     UIViewController *viewController = [self.viewControllers objectAtIndex:prevIndex];
     [self addSubview:viewController.view];
     viewController.view.frame = CGRectMake(currentVC.view.frame.origin.x - self.frame.size.width, 0, self.frame.size.width, self.frame.size.height);
@@ -161,7 +172,7 @@
     if (nextIndex >= self.viewControllers.count) {
         nextIndex = 0;
     }
-    NSLog(@"loading next vc, current index: %i, next index: %i", self.currentIndex, nextIndex);
+//    NSLog(@"loading next vc, current index: %i, next index: %i", self.currentIndex, nextIndex);
     UIViewController *viewController = [self.viewControllers objectAtIndex:nextIndex];
     [self addSubview:viewController.view];
     viewController.view.frame = CGRectMake(currentVC.view.frame.origin.x + self.frame.size.width, 0, self.frame.size.width, self.frame.size.height);
@@ -171,9 +182,13 @@
 - (void)updateCurrentIndex
 {
     // calculate the current index and account for the extra page spaces we've added for infinite scrolling
-    NSInteger index = fmodf(roundf((self.contentOffset.x - self.frame.size.width) / self.frame.size.width), self.viewControllers.count);
+    NSInteger index = roundf((self.contentOffset.x - self.frame.size.width) / self.frame.size.width);
+    
     if (index < 0) {
         index = self.viewControllers.count-1;
+    }
+    if (index >= _viewControllers.count) {
+        index = 0;
     }
     
     self.currentIndex = index;
@@ -191,13 +206,17 @@
 
 - (void)resetScrollToBeginning
 {
-    [self scrollRectToVisible:CGRectMake(self.frame.size.width, 0, self.frame.size.width, self.frame.size.height) animated:NO];
+    CGFloat offset = fmodf(self.contentOffset.x, self.frame.size.width) - 1;
+    self.contentOffset = CGPointMake(offset, 0);
+
     [self initFirstViewController];
 }
 
 - (void)resetScrollToEnd
 {
-    [self scrollRectToVisible:CGRectMake(self.viewControllers.count * self.frame.size.width, 0, self.frame.size.width, self.frame.size.height) animated:NO];
+    CGFloat offset = fmodf(self.contentOffset.x, self.frame.size.width) - 1;
+    self.contentOffset = CGPointMake(self.viewControllers.count * self.frame.size.width + offset, 0);
+
     [self initLastViewController];
 }
 
@@ -205,15 +224,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {    
-    NSLog(@"offset x: %.2f", self.contentOffset.x);
     [self updateCurrentIndex];
-    
-    if (self.contentOffset.x <= 0) {
-        [self resetScrollToEnd];
-    }
-    if (self.contentOffset.x >= (self.viewControllers.count+1) * self.frame.size.width) {
-        [self resetScrollToBeginning];
-    }
 }
 
 
