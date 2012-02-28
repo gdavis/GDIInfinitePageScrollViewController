@@ -10,5 +10,5 @@
 
 @interface ContentViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UILabel *viewLabel;
-
+@property (strong, nonatomic) NSString *labelText;
 @end

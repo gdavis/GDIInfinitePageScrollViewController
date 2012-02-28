@@ -39,18 +39,12 @@
     ContentViewController *pageThreeVC = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:nil];
     ContentViewController *pageFourVC = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:nil];
     ContentViewController *pageFiveVC = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:nil];
-    
-    [pageOneVC view];
-    [pageTwoVC view];
-    [pageThreeVC view];
-    [pageFourVC view];
-    [pageFiveVC view];
-    
-    pageOneVC.viewLabel.text = @"0";
-    pageTwoVC.viewLabel.text = @"1";
-    pageThreeVC.viewLabel.text = @"2";
-    pageFourVC.viewLabel.text = @"3";
-    pageFiveVC.viewLabel.text = @"4";
+
+    pageOneVC.labelText = @"0";
+    pageTwoVC.labelText = @"1";
+    pageThreeVC.labelText = @"2";
+    pageFourVC.labelText = @"3";
+    pageFiveVC.labelText = @"4";
     
     self.infiniteScrollView.viewControllers = [NSMutableArray arrayWithObjects:pageOneVC, pageTwoVC, pageThreeVC, pageFourVC, pageFiveVC, nil];
 }

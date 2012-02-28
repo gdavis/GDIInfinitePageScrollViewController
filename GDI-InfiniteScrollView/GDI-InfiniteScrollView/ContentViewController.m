@@ -10,6 +10,7 @@
 
 @implementation ContentViewController
 @synthesize viewLabel;
+@synthesize labelText;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,14 +35,14 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.viewLabel.text = self.labelText;
 }
 
 - (void)viewDidUnload
 {
+    NSLog(@"ContentViewController viewDidUnload");
     [self setViewLabel:nil];
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

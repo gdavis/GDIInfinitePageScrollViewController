@@ -22,6 +22,9 @@
 - (void)loadNextViewController;
 - (void)resetScrollToBeginning;
 - (void)resetScrollToEnd;
+- (void)unloadUnusedViewControllers;
+- (NSUInteger)indexOfPreviousController;
+- (NSUInteger)indexOfNextController;
 
 @end
 
@@ -69,6 +72,11 @@
     self.delegate = self;
     super.pagingEnabled = YES;
     _viewControllers = [NSMutableArray array];
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self
+               selector:@selector(unloadUnusedViewControllers)
+                   name:UIApplicationDidReceiveMemoryWarningNotification
+                 object:nil];
 }
 
 - (void)setPagingEnabled:(BOOL)pagingEnabled
@@ -153,10 +161,7 @@
 - (void)loadPrevViewController
 {
     UIViewController *currentVC = [self.viewControllers objectAtIndex:self.currentIndex];
-    NSInteger prevIndex = self.currentIndex-1;
-    if (prevIndex < 0) {
-        prevIndex = self.viewControllers.count-1;
-    }
+    NSInteger prevIndex = [self indexOfPreviousController];
 //    NSLog(@"loading prev vc, current index: %i, prev index: %i", self.currentIndex, prevIndex);
     UIViewController *viewController = [self.viewControllers objectAtIndex:prevIndex];
     [self addSubview:viewController.view];
@@ -168,16 +173,45 @@
 {
     UIViewController *currentVC = [self.viewControllers objectAtIndex:self.currentIndex];
     // moving right, forwards
-    NSInteger nextIndex = self.currentIndex+1;
-    if (nextIndex >= self.viewControllers.count) {
-        nextIndex = 0;
-    }
+    NSInteger nextIndex = [self indexOfNextController];
 //    NSLog(@"loading next vc, current index: %i, next index: %i", self.currentIndex, nextIndex);
     UIViewController *viewController = [self.viewControllers objectAtIndex:nextIndex];
     [self addSubview:viewController.view];
     viewController.view.frame = CGRectMake(currentVC.view.frame.origin.x + self.frame.size.width, 0, self.frame.size.width, self.frame.size.height);
 }
 
+- (void)unloadUnusedViewControllers
+{
+    for (int i=0; i < _viewControllers.count; i++) {
+        if (i != self.currentIndex && i != [self indexOfPreviousController] && i != [self indexOfNextController]) {
+            UIViewController *vc = [_viewControllers objectAtIndex:i];
+            if (vc.view) {
+                [vc.view removeFromSuperview];
+                vc.view = nil;
+                [vc viewDidUnload];
+            }
+        }
+    }
+}
+
+- (NSUInteger)indexOfPreviousController
+{
+    NSInteger prevIndex = self.currentIndex-1;
+    if (prevIndex < 0) {
+        prevIndex = self.viewControllers.count-1;
+    }
+    return prevIndex;
+}
+
+
+- (NSUInteger)indexOfNextController
+{
+    NSInteger nextIndex = self.currentIndex+1;
+    if (nextIndex >= self.viewControllers.count) {
+        nextIndex = 0;
+    }
+    return nextIndex;
+}
 
 - (void)updateCurrentIndex
 {
