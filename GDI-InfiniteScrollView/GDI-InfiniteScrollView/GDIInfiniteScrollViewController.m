@@ -12,7 +12,6 @@
 @property (strong, nonatomic) NSMutableArray *viewControllers;
 @property (nonatomic) NSUInteger currentIndex;
 @property (nonatomic) NSUInteger prevIndex;
-@property (nonatomic) CGFloat actualContentWidth;
 
 - (void)initializeView;
 
@@ -35,8 +34,7 @@
 - (NSUInteger)indexOfPreviousController;
 - (NSUInteger)indexOfNextController;
 
-- (void)scrollToCurrentIndexWithAnimation:(BOOL)animate;
-
+- (void)scrollToCurrentIndex;
 - (void)notifyDelegateOfCurrentIndexChange;
 
 @end
@@ -50,7 +48,6 @@
 
 @synthesize prevIndex = _prevIndex;
 @synthesize viewControllers = _viewControllers;
-@synthesize actualContentWidth = _actualContentWidth;
 
 
 #pragma mark - View Controller Life Cycle
@@ -73,6 +70,7 @@
     }
     return self;
 }
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -101,9 +99,9 @@
     self.scrollView.maximumZoomScale = 1.f;
     self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.showsHorizontalScrollIndicator = NO;
-    self.scrollView.decelerationRate = .1f;
     [self.scrollView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
 }
+
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
@@ -112,13 +110,13 @@
     }
 }
 
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    self.view.frame = self.view.superview.bounds;    
     [self initializeView];    
 }
+
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -138,7 +136,7 @@
 - (void)initializeView
 {    
     [self updateContentSize];
-    [self scrollToCurrentIndexWithAnimation:NO];
+    [self scrollToCurrentIndex];
 }
 
 #pragma mark - Public Methods
@@ -150,16 +148,16 @@
 }
 
 
-- (void)setCurrentIndex:(NSUInteger)index animation:(BOOL)animate
+- (void)setCurrentPageIndex:(NSUInteger)index
 {
     if (index > _viewControllers.count-1) {
         index = _viewControllers.count-1;
     }
     
+    self.prevIndex = index;
     currentIndex = index;
-    
-    [self notifyDelegateOfCurrentIndexChange];
-    [self scrollToCurrentIndexWithAnimation:animate];
+
+    [self scrollToCurrentIndex];
 }
 
 
@@ -201,6 +199,7 @@
     [self loadNextViewController];
 }
 
+
 - (void)initCurrentViewController
 {
     UIViewController *viewController = [_viewControllers objectAtIndex:self.currentIndex];
@@ -237,7 +236,7 @@
 
 
 - (void)updateCurrentViewController
-{
+{    
     NSInteger delta = self.currentIndex - self.prevIndex;
     // determine if we've moved more than one index, which means we
     // need to reset to the beginning or the end of the view
@@ -299,13 +298,22 @@
     return nextIndex;
 }
 
+
+- (void)layoutViews
+{
+    for (UIViewController *vc in _viewControllers) {
+        vc.view.frame = CGRectMake(vc.view.frame.origin.x, 0, self.view.frame.size.width, self.view.frame.size.height);
+    }
+}
+
+
 #pragma mark - Scroll View Management
 
 
-- (void)scrollToCurrentIndexWithAnimation:(BOOL)animate
+- (void)scrollToCurrentIndex
 {
     CGPoint offsetPoint = CGPointMake(self.scrollView.frame.size.width + self.scrollView.frame.size.width * self.currentIndex, 0);
-    [self.scrollView setContentOffset:offsetPoint animated:animate];
+    [self.scrollView setContentOffset:offsetPoint animated:NO];
     [self initCurrentViewController];
 }
 
@@ -318,14 +326,14 @@
     // 9, 0, 1 ... 8, 9, 0
     CGFloat wv = (self.viewControllers.count + 2) * self.scrollView.frame.size.width;
     self.scrollView.contentSize = CGSizeMake(wv, self.scrollView.frame.size.height);
-    self.actualContentWidth = self.viewControllers.count * self.scrollView.frame.size.width;
 }
 
 
 - (void)updateCurrentIndex
 {
     // calculate the current index and account for the extra page spaces we've added for infinite scrolling
-    NSInteger index = roundf((self.scrollView.contentOffset.x - self.scrollView.frame.size.width) / self.scrollView.frame.size.width);
+    CGFloat rawIndex = (self.scrollView.contentOffset.x - self.scrollView.frame.size.width) / self.scrollView.frame.size.width;
+    NSInteger index = roundf(rawIndex);
     
     if (index < 0) {
         index = self.viewControllers.count-1;
@@ -335,12 +343,9 @@
     }
     
     self.currentIndex = index;
-}
-
-- (void)layoutViews
-{
-    for (UIViewController *vc in _viewControllers) {
-        vc.view.frame = CGRectMake(vc.view.frame.origin.x, 0, self.view.frame.size.width, self.view.frame.size.height);
+    
+    if ([delegate respondsToSelector:@selector(infiniteScrollViewDidScrollToRawIndex:)]) {
+        [delegate infiniteScrollViewDidScrollToRawIndex:rawIndex];
     }
 }
 
@@ -388,8 +393,9 @@
     [self updateCurrentIndex];
 }
 
+
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
+{    
     // this line fixes a bug that would occur after resetting the scroll view to the end,
     // quickly swiping again, and the scroll view would skip past an entire page.
     [self.scrollView setContentOffset:self.scrollView.contentOffset animated:NO];

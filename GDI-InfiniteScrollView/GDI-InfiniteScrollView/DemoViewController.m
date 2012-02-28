@@ -49,10 +49,15 @@
     
     infiniteScrollerVC = [[GDIInfiniteScrollViewController alloc] initWithViewControllers:[NSArray arrayWithObjects:pageOneVC, pageTwoVC, pageThreeVC, pageFourVC, pageFiveVC, nil]];
 
+    
     infiniteScrollerVC.delegate = self;
     [self.infiniteScrollViewContainer addSubview:infiniteScrollerVC.view];
     self.infiniteScrollerVC.view.frame = self.infiniteScrollViewContainer.bounds;
+}
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)viewDidUnload
@@ -65,6 +70,11 @@
 - (void)infiniteScrollViewDidScrollToIndex:(NSUInteger)index
 {
     NSLog(@"infiniteScrollViewDidScrollToIndex: %i", index);
+}
+
+- (void)infiniteScrollViewDidScrollToRawIndex:(CGFloat)index
+{
+//    NSLog(@"infiniteScrollViewDidScrollToRawIndex: %.2f", index);
 }
 
 @end

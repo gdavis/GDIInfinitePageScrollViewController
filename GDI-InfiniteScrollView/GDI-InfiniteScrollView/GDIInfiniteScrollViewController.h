@@ -17,12 +17,12 @@
 @property (weak, nonatomic) NSObject <GDIInfiniteScrollViewControllerDelegate> *delegate;
 
 - (id)initWithViewControllers:(NSArray *)viewControllers;
-
-- (void)setCurrentIndex:(NSUInteger)index animation:(BOOL)animate;
+- (void)setCurrentPageIndex:(NSUInteger)index;
 
 @end
 
 
 @protocol GDIInfiniteScrollViewControllerDelegate
 - (void)infiniteScrollViewDidScrollToIndex:(NSUInteger)index;
+- (void)infiniteScrollViewDidScrollToRawIndex:(CGFloat)index; // decimal value of the position of the view.
 @end
