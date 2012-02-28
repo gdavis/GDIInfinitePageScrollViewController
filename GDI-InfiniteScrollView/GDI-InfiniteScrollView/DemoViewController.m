@@ -11,7 +11,8 @@
 #import "ContentViewController.h"
 
 @implementation DemoViewController
-@synthesize infiniteScrollView;
+@synthesize infiniteScrollerVC;
+@synthesize infiniteScrollViewContainer;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -46,37 +47,19 @@
     pageFourVC.labelText = @"3";
     pageFiveVC.labelText = @"4";
     
-    self.infiniteScrollView.viewControllers = [NSMutableArray arrayWithObjects:pageOneVC, pageTwoVC, pageThreeVC, pageFourVC, pageFiveVC, nil];
+    infiniteScrollerVC = [[GDIInfiniteScrollViewController alloc] initWithViewControllers:[NSArray arrayWithObjects:pageOneVC, pageTwoVC, pageThreeVC, pageFourVC, pageFiveVC, nil]];
+    
+    [self.infiniteScrollViewContainer addSubview:infiniteScrollerVC.view];
+    self.infiniteScrollerVC.view.frame = self.infiniteScrollViewContainer.bounds;
+    
+//    [infiniteScrollerVC setCurrentIndex:2 animation:NO];
 }
 
 - (void)viewDidUnload
 {
-    [self setInfiniteScrollView:nil];
+    [self setInfiniteScrollViewContainer:nil];
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
-
-- (NSUInteger)numberOfPagesForInfiniteScrollView:(GDIInfiniteScrollView *)scrollView
-{
-    return 10;
-}
-
-- (NSUInteger)maxNumberOfViewablePagesForInfiniteScrollView:(GDIInfiniteScrollView *)scrollView
-{
-    return 3;
-}
-
-- (UIView *)viewForInfiniteScrollView:(GDIInfiniteScrollView *)scrollView atIndex:(NSUInteger)index
-{
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-    label.text = [NSString stringWithFormat:@"view %i", index];
-    label.textAlignment = UITextAlignmentCenter;
-    label.backgroundColor = [UIColor clearColor];
-    label.layer.borderColor = [[UIColor redColor] CGColor];
-    label.layer.borderWidth = 1.f;
-    return label;
-}
 
 @end

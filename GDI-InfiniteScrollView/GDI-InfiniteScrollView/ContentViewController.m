@@ -7,6 +7,7 @@
 //
 
 #import "ContentViewController.h"
+#import "UIColor+GDIAdditions.h"
 
 @implementation ContentViewController
 @synthesize viewLabel;
@@ -36,6 +37,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.viewLabel.text = self.labelText;
+    
+    self.view.backgroundColor = [UIColor randomColor];
 }
 
 - (void)viewDidUnload
