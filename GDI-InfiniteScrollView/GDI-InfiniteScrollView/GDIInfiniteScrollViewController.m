@@ -241,14 +241,11 @@
     NSInteger delta = self.currentIndex - self.prevIndex;
     // determine if we've moved more than one index, which means we
     // need to reset to the beginning or the end of the view
-//    NSLog(@"updateCurrentViewController with index delta: %i", delta);
     if (abs(delta) > 1) {
         if (delta < 0) {
-            NSLog(@"resetting to beginning");
             [self resetScrollToBeginning];
         }
         else {
-            NSLog(@"resetting to end");
             [self resetScrollToEnd];
         }
     }
@@ -257,13 +254,11 @@
         // and build the upcoming view controller for that direction.
         if (self.currentIndex < self.prevIndex) {
             // moving left, backwards
-//            NSLog(@"loading prev");
             [self loadPrevViewController];
         }
         
         if (self.currentIndex > self.prevIndex) {
             // moving right, forwards
-//            NSLog(@"loading next");
             [self loadNextViewController];
         }
     }
