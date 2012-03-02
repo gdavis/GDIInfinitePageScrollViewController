@@ -20,7 +20,7 @@
 		77B272DF14FC1158000E1557 /* GDI_InfiniteScrollViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B272DE14FC1158000E1557 /* GDI_InfiniteScrollViewTests.m */; };
 		77B272EC14FC11E7000E1557 /* DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B272EA14FC11E7000E1557 /* DemoViewController.m */; };
 		77B272ED14FC11E7000E1557 /* DemoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77B272EB14FC11E7000E1557 /* DemoView.xib */; };
-		77B272F014FC1235000E1557 /* GDIInfiniteScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B272EF14FC1235000E1557 /* GDIInfiniteScrollViewController.m */; };
+		77B272F014FC1235000E1557 /* GDIInfinitePageScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B272EF14FC1235000E1557 /* GDIInfinitePageScrollViewController.m */; };
 		77B272F614FC2331000E1557 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77B272F514FC2331000E1557 /* QuartzCore.framework */; };
 		77B272FA14FC3014000E1557 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B272F814FC3013000E1557 /* ContentViewController.m */; };
 		77B272FB14FC3014000E1557 /* ContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77B272F914FC3013000E1557 /* ContentViewController.xib */; };
@@ -57,8 +57,8 @@
 		77B272E914FC11E7000E1557 /* DemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoViewController.h; sourceTree = "<group>"; };
 		77B272EA14FC11E7000E1557 /* DemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoViewController.m; sourceTree = "<group>"; };
 		77B272EB14FC11E7000E1557 /* DemoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoView.xib; sourceTree = "<group>"; };
-		77B272EE14FC1235000E1557 /* GDIInfiniteScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDIInfiniteScrollViewController.h; sourceTree = "<group>"; };
-		77B272EF14FC1235000E1557 /* GDIInfiniteScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDIInfiniteScrollViewController.m; sourceTree = "<group>"; };
+		77B272EE14FC1235000E1557 /* GDIInfinitePageScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GDIInfinitePageScrollViewController.h; sourceTree = "<group>"; };
+		77B272EF14FC1235000E1557 /* GDIInfinitePageScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDIInfinitePageScrollViewController.m; sourceTree = "<group>"; };
 		77B272F514FC2331000E1557 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		77B272F714FC3013000E1557 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
 		77B272F814FC3013000E1557 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
@@ -175,8 +175,8 @@
 		77B272E814FC11CE000E1557 /* GDI Infinite Scroll View */ = {
 			isa = PBXGroup;
 			children = (
-				77B272EE14FC1235000E1557 /* GDIInfiniteScrollViewController.h */,
-				77B272EF14FC1235000E1557 /* GDIInfiniteScrollViewController.m */,
+				77B272EE14FC1235000E1557 /* GDIInfinitePageScrollViewController.h */,
+				77B272EF14FC1235000E1557 /* GDIInfinitePageScrollViewController.m */,
 			);
 			name = "GDI Infinite Scroll View";
 			sourceTree = "<group>";
@@ -292,7 +292,7 @@
 				77B272C614FC1158000E1557 /* main.m in Sources */,
 				77B272CA14FC1158000E1557 /* GDIAppDelegate.m in Sources */,
 				77B272EC14FC11E7000E1557 /* DemoViewController.m in Sources */,
-				77B272F014FC1235000E1557 /* GDIInfiniteScrollViewController.m in Sources */,
+				77B272F014FC1235000E1557 /* GDIInfinitePageScrollViewController.m in Sources */,
 				77B272FA14FC3014000E1557 /* ContentViewController.m in Sources */,
 				77B2731614FD73C0000E1557 /* UIColor+GDIAdditions.m in Sources */,
 			);

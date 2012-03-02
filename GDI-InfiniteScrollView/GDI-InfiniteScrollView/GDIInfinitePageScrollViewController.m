@@ -6,12 +6,18 @@
 //  Copyright (c) 2012 Grant Davis Interactive, LLC. All rights reserved.
 //
 
-#import "GDIInfiniteScrollViewController.h"
+#import "GDIInfinitePageScrollViewController.h"
 
-@interface GDIInfiniteScrollViewController()
+@interface GDIInfinitePageScrollViewController()
 @property (strong, nonatomic) NSMutableArray *viewControllers;
 @property (nonatomic) NSUInteger currentIndex;
 @property (nonatomic) NSUInteger prevIndex;
+
+@property (strong, nonatomic) NSDate *moveToIndexStartTime;
+@property (strong, nonatomic) NSTimer *moveToIndexTimer;
+@property (nonatomic) CGFloat moveToIndexOffsetStartValue;
+@property (nonatomic) CGFloat moveToIndexOffsetDelta;
+@property (nonatomic) CGFloat moveToIndexOffsetDuration;
 
 - (void)initializeView;
 
@@ -36,19 +42,29 @@
 
 - (void)scrollToCurrentIndex;
 - (void)notifyDelegateOfCurrentIndexChange;
+- (void)notifyDelegateOfOffsetChange;
+
+- (void)moveToIndex:(NSInteger)index;
+- (void)handleMoveToIndexTick;
+- (CGFloat)easeInOutWithCurrentTime:(CGFloat)t start:(CGFloat)b change:(CGFloat)c duration:(CGFloat)d;
 
 @end
 
-@implementation GDIInfiniteScrollViewController
+@implementation GDIInfinitePageScrollViewController
 
 @synthesize pageViewControllers;
 @synthesize currentIndex;
 @synthesize scrollView = _scrollView;
 @synthesize delegate;
+@synthesize isScrolling;
 
 @synthesize prevIndex = _prevIndex;
 @synthesize viewControllers = _viewControllers;
-
+@synthesize moveToIndexStartTime = _moveToIndexStartTime;
+@synthesize moveToIndexTimer = _moveToIndexTimer;
+@synthesize moveToIndexOffsetStartValue = _moveToIndexOffsetStartValue;
+@synthesize moveToIndexOffsetDelta = _moveToIndexOffsetDelta;
+@synthesize moveToIndexOffsetDuration = _moveToIndexOffsetDuration;
 
 #pragma mark - View Controller Life Cycle
 
@@ -99,6 +115,7 @@
     self.scrollView.maximumZoomScale = 1.f;
     self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.showsHorizontalScrollIndicator = NO;
+    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.scrollView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
 }
 
@@ -106,7 +123,9 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"frame"]) {
+        [self updateContentSize];
         [self layoutViews];
+        [self scrollToCurrentIndex];
     }
 }
 
@@ -158,6 +177,75 @@
     currentIndex = index;
 
     [self scrollToCurrentIndex];
+}
+
+- (void)scrollByRawIndex:(CGFloat)rawIndex
+{
+    CGPoint offsetPoint = CGPointMake(self.scrollView.frame.size.width + self.scrollView.frame.size.width * rawIndex, 0);
+    self.scrollView.contentOffset = offsetPoint;
+    [self updateCurrentIndex];
+}
+
+
+- (void)nextPage
+{
+    [self moveToIndex:self.currentIndex+1];
+}
+
+- (void)prevPage
+{
+    [self moveToIndex:self.currentIndex-1];
+}
+
+
+- (void)moveToIndex:(NSInteger)index
+{    
+    self.isScrolling = YES;
+    
+    CGFloat targetOffset = self.scrollView.frame.size.width + self.scrollView.frame.size.width * index;
+    CGFloat currentOffset = self.scrollView.contentOffset.x;
+    
+    _moveToIndexOffsetDelta = targetOffset - currentOffset;    
+    _moveToIndexOffsetStartValue = currentOffset;
+    _moveToIndexStartTime = [NSDate date];
+    _moveToIndexOffsetDuration = [[_moveToIndexStartTime dateByAddingTimeInterval:.666f] timeIntervalSinceDate:_moveToIndexStartTime];
+    
+    [_moveToIndexTimer invalidate];
+    _moveToIndexTimer = [NSTimer scheduledTimerWithTimeInterval:1/60.f target:self selector:@selector(handleMoveToIndexTick) userInfo:nil repeats:YES];
+}
+
+
+- (void)handleMoveToIndexTick
+{
+    // see what our current duration is
+    CGFloat currentTime = fabsf([_moveToIndexStartTime timeIntervalSinceNow]);
+    
+    // stop scrolling if we are past our duration
+    if (currentTime >= _moveToIndexOffsetDuration) {
+        [_moveToIndexTimer invalidate];
+        [self scrollToCurrentIndex];
+    }
+    // otherwise, calculate how much we should be scrolling our content by
+    else {
+        
+        CGFloat delta = [self easeInOutWithCurrentTime:currentTime start:_moveToIndexOffsetStartValue change:_moveToIndexOffsetDelta duration:_moveToIndexOffsetDuration];        
+        
+        // this adjusts the new offset position when the delta is large enough that it should wrap 
+        // back around to the beginning of the scroll view. 
+        // the view then naturally adjusts to display the correct page.
+        if (delta > self.scrollView.frame.size.width * .5 + self.scrollView.frame.size.width * _viewControllers.count) {
+            delta -= self.scrollView.frame.size.width * _viewControllers.count;
+        }
+        
+        // this does basically the same as the condition above, except handles the case
+        // where we are going to the previous page and we need to wrap around to the end
+        // of the scroll view. 
+        if (delta < self.scrollView.frame.size.width * .5) {
+            delta += self.scrollView.frame.size.width * _viewControllers.count;
+        }
+        
+        self.scrollView.contentOffset = CGPointMake(delta, 0);
+    }
 }
 
 
@@ -301,9 +389,7 @@
 
 - (void)layoutViews
 {
-    for (UIViewController *vc in _viewControllers) {
-        vc.view.frame = CGRectMake(vc.view.frame.origin.x, 0, self.view.frame.size.width, self.view.frame.size.height);
-    }
+    [self initCurrentViewController];
 }
 
 
@@ -312,9 +398,11 @@
 
 - (void)scrollToCurrentIndex
 {
+    self.isScrolling = YES;
     CGPoint offsetPoint = CGPointMake(self.scrollView.frame.size.width + self.scrollView.frame.size.width * self.currentIndex, 0);
     [self.scrollView setContentOffset:offsetPoint animated:NO];
     [self initCurrentViewController];
+    self.isScrolling = NO;
 }
 
 
@@ -344,8 +432,8 @@
     
     self.currentIndex = index;
     
-    if ([delegate respondsToSelector:@selector(infiniteScrollViewDidScrollToRawIndex:)]) {
-        [delegate infiniteScrollViewDidScrollToRawIndex:rawIndex];
+    if ([delegate respondsToSelector:@selector(infiniteScrollView:didScrollToRawIndex:)]) {
+        [delegate infiniteScrollView:self didScrollToRawIndex:rawIndex];
     }
 }
 
@@ -379,18 +467,46 @@
 
 - (void)notifyDelegateOfCurrentIndexChange
 {
-    if ([delegate respondsToSelector:@selector(infiniteScrollViewDidScrollToIndex:)]) {
-        [delegate infiniteScrollViewDidScrollToIndex:self.currentIndex];
+    if ([delegate respondsToSelector:@selector(infiniteScrollView:didScrollToIndex:)]) {
+        [delegate infiniteScrollView:self didScrollToIndex:self.currentIndex];
     }
 }
 
+- (void)notifyDelegateOfOffsetChange
+{
+    if ([delegate respondsToSelector:@selector(infiniteScrollView:didScrollToContentOffset:)]) {
+        [delegate infiniteScrollView:self didScrollToContentOffset:self.scrollView.contentOffset];
+    }
+}
+
+- (void)setIsScrolling:(BOOL)scrolling
+{
+    if (isScrolling == scrolling) {
+        return;
+    }
+    
+    isScrolling = scrolling;
+    
+    if (isScrolling) {
+        if ([delegate respondsToSelector:@selector(infiniteScrollViewDidBeginScrolling:)]) {
+            [delegate infiniteScrollViewDidBeginScrolling:self];
+        }
+    }
+    else {
+        if ([delegate respondsToSelector:@selector(infiniteScrollViewDidEndScrolling:)]) {
+            [delegate infiniteScrollViewDidEndScrolling:self];
+        }
+    }
+}
 
 #pragma mark - UIScrollViewDelegate Methods
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {    
+    self.isScrolling = YES;
     [self updateCurrentIndex];
+    [self notifyDelegateOfOffsetChange];
 }
 
 
@@ -399,6 +515,57 @@
     // this line fixes a bug that would occur after resetting the scroll view to the end,
     // quickly swiping again, and the scroll view would skip past an entire page.
     [self.scrollView setContentOffset:self.scrollView.contentOffset animated:NO];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (!decelerate) {
+        self.isScrolling = NO;
+    }
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    self.isScrolling = NO;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    self.isScrolling = NO;
+}
+
+/*
+ static function easeIn (t:Number, b:Number, c:Number, d:Number):Number {
+ return (t==0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
+ }
+ static function easeOut (t:Number, b:Number, c:Number, d:Number):Number {
+ return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+ }
+ static function easeInOut (t:Number, b:Number, c:Number, d:Number):Number {
+ if (t==0) return b;
+ if (t==d) return b+c;
+ if ((t/=d/2) < 1) return c/2 * Math.pow(2, 10 * (t - 1)) + b;
+ return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
+ }
+ 
+ Easing equations taken with permission under the BSD license from Robert Penner.
+ 
+ Copyright © 2001 Robert Penner
+ All rights reserved.
+ */
+
+- (CGFloat)easeInOutWithCurrentTime:(CGFloat)t start:(CGFloat)b change:(CGFloat)c duration:(CGFloat)d
+{
+    if (t==0) {
+        return b;
+    }
+    if (t==d) {
+        return b+c;
+    }
+    if ((t/=d/2) < 1) {
+        return c/2 * powf(2, 10 * (t-1)) + b;
+    }
+    return c/2 * (-powf(2, -10 * --t) + 2) + b;
 }
 
 @end

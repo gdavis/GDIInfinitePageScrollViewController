@@ -47,7 +47,7 @@
     pageFourVC.labelText = @"3";
     pageFiveVC.labelText = @"4";
     
-    infiniteScrollerVC = [[GDIInfiniteScrollViewController alloc] initWithViewControllers:[NSArray arrayWithObjects:pageOneVC, pageTwoVC, pageThreeVC, pageFourVC, pageFiveVC, nil]];
+    infiniteScrollerVC = [[GDIInfinitePageScrollViewController alloc] initWithViewControllers:[NSArray arrayWithObjects:pageOneVC, pageTwoVC, pageThreeVC, pageFourVC, pageFiveVC, nil]];
 
     
     infiniteScrollerVC.delegate = self;
