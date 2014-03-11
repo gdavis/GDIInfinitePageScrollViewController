@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GDIInfinitePageScrollViewController.h"
 
-@interface DemoViewController : UIViewController <GDIInfiniteScrollViewControllerDelegate>
+@interface DemoViewController : UIViewController <GDIInfinitePageScrollViewControllerDelegate>
 @property (strong, nonatomic) GDIInfinitePageScrollViewController *infiniteScrollerVC;
 @property (weak, nonatomic) IBOutlet UIView *infiniteScrollViewContainer;
 
