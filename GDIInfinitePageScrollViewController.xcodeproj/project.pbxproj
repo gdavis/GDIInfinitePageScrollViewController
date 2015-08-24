@@ -38,26 +38,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		77B272B514FC1158000E1557 /* GDI-InfiniteScrollView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GDI-InfiniteScrollView.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77B272B514FC1158000E1557 /* GDIInfinitePageScrollViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GDIInfinitePageScrollViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77B272B914FC1158000E1557 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		77B272BB14FC1158000E1557 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		77B272BD14FC1158000E1557 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		77B272C114FC1158000E1557 /* GDI-InfiniteScrollView-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GDI-InfiniteScrollView-Info.plist"; sourceTree = "<group>"; };
+		77B272C114FC1158000E1557 /* GDIInfinitePageScrollViewController-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GDIInfinitePageScrollViewController-Info.plist"; sourceTree = "<group>"; };
 		77B272C314FC1158000E1557 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		77B272C514FC1158000E1557 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		77B272C714FC1158000E1557 /* GDI-InfiniteScrollView-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GDI-InfiniteScrollView-Prefix.pch"; sourceTree = "<group>"; };
+		77B272C714FC1158000E1557 /* GDIInfinitePageScrollViewController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GDIInfinitePageScrollViewController-Prefix.pch"; sourceTree = "<group>"; };
 		77B272C814FC1158000E1557 /* GDIAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GDIAppDelegate.h; sourceTree = "<group>"; };
 		77B272C914FC1158000E1557 /* GDIAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GDIAppDelegate.m; sourceTree = "<group>"; };
-		77B272D014FC1158000E1557 /* GDI-InfiniteScrollViewTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GDI-InfiniteScrollViewTests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77B272D014FC1158000E1557 /* GDIInfinitePageScrollViewController.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GDIInfinitePageScrollViewController.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		77B272D114FC1158000E1557 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		77B272D914FC1158000E1557 /* GDI-InfiniteScrollViewTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GDI-InfiniteScrollViewTests-Info.plist"; sourceTree = "<group>"; };
+		77B272D914FC1158000E1557 /* GDIInfinitePageScrollViewControllerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GDIInfinitePageScrollViewControllerTests-Info.plist"; sourceTree = "<group>"; };
 		77B272DB14FC1158000E1557 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		77B272DD14FC1158000E1557 /* GDI_InfiniteScrollViewTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GDI_InfiniteScrollViewTests.h; sourceTree = "<group>"; };
 		77B272DE14FC1158000E1557 /* GDI_InfiniteScrollViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GDI_InfiniteScrollViewTests.m; sourceTree = "<group>"; };
 		77B272E914FC11E7000E1557 /* DemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoViewController.h; sourceTree = "<group>"; };
 		77B272EA14FC11E7000E1557 /* DemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoViewController.m; sourceTree = "<group>"; };
 		77B272EB14FC11E7000E1557 /* DemoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoView.xib; sourceTree = "<group>"; };
-		77B272EE14FC1235000E1557 /* GDIInfinitePageScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GDIInfinitePageScrollViewController.h; sourceTree = "<group>"; };
+		77B272EE14FC1235000E1557 /* GDIInfinitePageScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDIInfinitePageScrollViewController.h; sourceTree = "<group>"; };
 		77B272EF14FC1235000E1557 /* GDIInfinitePageScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDIInfinitePageScrollViewController.m; sourceTree = "<group>"; };
 		77B272F514FC2331000E1557 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		77B272F714FC3013000E1557 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
@@ -95,8 +95,9 @@
 		77B272AA14FC1158000E1557 = {
 			isa = PBXGroup;
 			children = (
-				77B272BF14FC1158000E1557 /* GDI-InfiniteScrollView */,
-				77B272D714FC1158000E1557 /* GDI-InfiniteScrollViewTests */,
+				77B272BF14FC1158000E1557 /* GDIInfinitePageScrollViewController */,
+				77B272C014FC1158000E1557 /* Supporting Files */,
+				77B272D714FC1158000E1557 /* GDIInfinitePageScrollViewControllerTests */,
 				77B272B814FC1158000E1557 /* Frameworks */,
 				77B272B614FC1158000E1557 /* Products */,
 			);
@@ -105,8 +106,8 @@
 		77B272B614FC1158000E1557 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				77B272B514FC1158000E1557 /* GDI-InfiniteScrollView.app */,
-				77B272D014FC1158000E1557 /* GDI-InfiniteScrollViewTests.octest */,
+				77B272B514FC1158000E1557 /* GDIInfinitePageScrollViewController.app */,
+				77B272D014FC1158000E1557 /* GDIInfinitePageScrollViewController.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -123,15 +124,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		77B272BF14FC1158000E1557 /* GDI-InfiniteScrollView */ = {
+		77B272BF14FC1158000E1557 /* GDIInfinitePageScrollViewController */ = {
 			isa = PBXGroup;
 			children = (
+				77B272E814FC11CE000E1557 /* GDI Infinite Scroll View */,
 				77B2731414FD73BF000E1557 /* UIColor+GDIAdditions.h */,
 				77B2731514FD73C0000E1557 /* UIColor+GDIAdditions.m */,
-				77B272E814FC11CE000E1557 /* GDI Infinite Scroll View */,
 				77B272C814FC1158000E1557 /* GDIAppDelegate.h */,
 				77B272C914FC1158000E1557 /* GDIAppDelegate.m */,
-				77B272C014FC1158000E1557 /* Supporting Files */,
 				77B272E914FC11E7000E1557 /* DemoViewController.h */,
 				77B272EA14FC11E7000E1557 /* DemoViewController.m */,
 				77B272EB14FC11E7000E1557 /* DemoView.xib */,
@@ -139,34 +139,37 @@
 				77B272F814FC3013000E1557 /* ContentViewController.m */,
 				77B272F914FC3013000E1557 /* ContentViewController.xib */,
 			);
+			name = GDIInfinitePageScrollViewController;
 			path = "GDI-InfiniteScrollView";
 			sourceTree = "<group>";
 		};
 		77B272C014FC1158000E1557 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				77B272C114FC1158000E1557 /* GDI-InfiniteScrollView-Info.plist */,
+				77B272C114FC1158000E1557 /* GDIInfinitePageScrollViewController-Info.plist */,
 				77B272C214FC1158000E1557 /* InfoPlist.strings */,
 				77B272C514FC1158000E1557 /* main.m */,
-				77B272C714FC1158000E1557 /* GDI-InfiniteScrollView-Prefix.pch */,
+				77B272C714FC1158000E1557 /* GDIInfinitePageScrollViewController-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			path = "GDI-InfiniteScrollView";
 			sourceTree = "<group>";
 		};
-		77B272D714FC1158000E1557 /* GDI-InfiniteScrollViewTests */ = {
+		77B272D714FC1158000E1557 /* GDIInfinitePageScrollViewControllerTests */ = {
 			isa = PBXGroup;
 			children = (
 				77B272DD14FC1158000E1557 /* GDI_InfiniteScrollViewTests.h */,
 				77B272DE14FC1158000E1557 /* GDI_InfiniteScrollViewTests.m */,
 				77B272D814FC1158000E1557 /* Supporting Files */,
 			);
+			name = GDIInfinitePageScrollViewControllerTests;
 			path = "GDI-InfiniteScrollViewTests";
 			sourceTree = "<group>";
 		};
 		77B272D814FC1158000E1557 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				77B272D914FC1158000E1557 /* GDI-InfiniteScrollViewTests-Info.plist */,
+				77B272D914FC1158000E1557 /* GDIInfinitePageScrollViewControllerTests-Info.plist */,
 				77B272DA14FC1158000E1557 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -184,9 +187,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		77B272B414FC1158000E1557 /* GDI-InfiniteScrollView */ = {
+		77B272B414FC1158000E1557 /* GDIInfinitePageScrollViewController */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 77B272E214FC1158000E1557 /* Build configuration list for PBXNativeTarget "GDI-InfiniteScrollView" */;
+			buildConfigurationList = 77B272E214FC1158000E1557 /* Build configuration list for PBXNativeTarget "GDIInfinitePageScrollViewController" */;
 			buildPhases = (
 				77B272B114FC1158000E1557 /* Sources */,
 				77B272B214FC1158000E1557 /* Frameworks */,
@@ -196,14 +199,14 @@
 			);
 			dependencies = (
 			);
-			name = "GDI-InfiniteScrollView";
+			name = GDIInfinitePageScrollViewController;
 			productName = "GDI-InfiniteScrollView";
-			productReference = 77B272B514FC1158000E1557 /* GDI-InfiniteScrollView.app */;
+			productReference = 77B272B514FC1158000E1557 /* GDIInfinitePageScrollViewController.app */;
 			productType = "com.apple.product-type.application";
 		};
-		77B272CF14FC1158000E1557 /* GDI-InfiniteScrollViewTests */ = {
+		77B272CF14FC1158000E1557 /* GDIInfinitePageScrollViewControllerTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 77B272E514FC1158000E1557 /* Build configuration list for PBXNativeTarget "GDI-InfiniteScrollViewTests" */;
+			buildConfigurationList = 77B272E514FC1158000E1557 /* Build configuration list for PBXNativeTarget "GDIInfinitePageScrollViewControllerTests" */;
 			buildPhases = (
 				77B272CB14FC1158000E1557 /* Sources */,
 				77B272CC14FC1158000E1557 /* Frameworks */,
@@ -215,10 +218,10 @@
 			dependencies = (
 				77B272D614FC1158000E1557 /* PBXTargetDependency */,
 			);
-			name = "GDI-InfiniteScrollViewTests";
+			name = GDIInfinitePageScrollViewControllerTests;
 			productName = "GDI-InfiniteScrollViewTests";
-			productReference = 77B272D014FC1158000E1557 /* GDI-InfiniteScrollViewTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 77B272D014FC1158000E1557 /* GDIInfinitePageScrollViewController.octest */;
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -229,7 +232,7 @@
 				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "Grant Davis Interactive, LLC";
 			};
-			buildConfigurationList = 77B272AF14FC1158000E1557 /* Build configuration list for PBXProject "GDI-InfiniteScrollView" */;
+			buildConfigurationList = 77B272AF14FC1158000E1557 /* Build configuration list for PBXProject "GDIInfinitePageScrollViewController" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -241,8 +244,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				77B272B414FC1158000E1557 /* GDI-InfiniteScrollView */,
-				77B272CF14FC1158000E1557 /* GDI-InfiniteScrollViewTests */,
+				77B272B414FC1158000E1557 /* GDIInfinitePageScrollViewController */,
+				77B272CF14FC1158000E1557 /* GDIInfinitePageScrollViewControllerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -311,7 +314,7 @@
 /* Begin PBXTargetDependency section */
 		77B272D614FC1158000E1557 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 77B272B414FC1158000E1557 /* GDI-InfiniteScrollView */;
+			target = 77B272B414FC1158000E1557 /* GDIInfinitePageScrollViewController */;
 			targetProxy = 77B272D514FC1158000E1557 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -387,9 +390,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GDI-InfiniteScrollView/GDI-InfiniteScrollView-Prefix.pch";
-				INFOPLIST_FILE = "GDI-InfiniteScrollView/GDI-InfiniteScrollView-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "GDI-InfiniteScrollView/GDIInfinitePageScrollViewController-Prefix.pch";
+				INFOPLIST_FILE = "GDI-InfiniteScrollView/GDIInfinitePageScrollViewController-Info.plist";
+				PRODUCT_NAME = GDIInfinitePageScrollViewController;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -398,9 +401,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GDI-InfiniteScrollView/GDI-InfiniteScrollView-Prefix.pch";
-				INFOPLIST_FILE = "GDI-InfiniteScrollView/GDI-InfiniteScrollView-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "GDI-InfiniteScrollView/GDIInfinitePageScrollViewController-Prefix.pch";
+				INFOPLIST_FILE = "GDI-InfiniteScrollView/GDIInfinitePageScrollViewController-Info.plist";
+				PRODUCT_NAME = GDIInfinitePageScrollViewController;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -414,9 +417,9 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GDI-InfiniteScrollView/GDI-InfiniteScrollView-Prefix.pch";
-				INFOPLIST_FILE = "GDI-InfiniteScrollViewTests/GDI-InfiniteScrollViewTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "GDI-InfiniteScrollView/GDIInfinitePageScrollViewController-Prefix.pch";
+				INFOPLIST_FILE = "GDI-InfiniteScrollViewTests/GDIInfinitePageScrollViewControllerTests-Info.plist";
+				PRODUCT_NAME = GDIInfinitePageScrollViewController;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -431,9 +434,9 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GDI-InfiniteScrollView/GDI-InfiniteScrollView-Prefix.pch";
-				INFOPLIST_FILE = "GDI-InfiniteScrollViewTests/GDI-InfiniteScrollViewTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "GDI-InfiniteScrollView/GDIInfinitePageScrollViewController-Prefix.pch";
+				INFOPLIST_FILE = "GDI-InfiniteScrollViewTests/GDIInfinitePageScrollViewControllerTests-Info.plist";
+				PRODUCT_NAME = GDIInfinitePageScrollViewController;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -442,7 +445,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		77B272AF14FC1158000E1557 /* Build configuration list for PBXProject "GDI-InfiniteScrollView" */ = {
+		77B272AF14FC1158000E1557 /* Build configuration list for PBXProject "GDIInfinitePageScrollViewController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				77B272E014FC1158000E1557 /* Debug */,
@@ -451,7 +454,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		77B272E214FC1158000E1557 /* Build configuration list for PBXNativeTarget "GDI-InfiniteScrollView" */ = {
+		77B272E214FC1158000E1557 /* Build configuration list for PBXNativeTarget "GDIInfinitePageScrollViewController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				77B272E314FC1158000E1557 /* Debug */,
@@ -460,7 +463,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		77B272E514FC1158000E1557 /* Build configuration list for PBXNativeTarget "GDI-InfiniteScrollViewTests" */ = {
+		77B272E514FC1158000E1557 /* Build configuration list for PBXNativeTarget "GDIInfinitePageScrollViewControllerTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				77B272E614FC1158000E1557 /* Debug */,
