@@ -19,52 +19,11 @@
 @property (nonatomic) CGFloat moveToIndexOffsetDelta;
 @property (nonatomic) CGFloat moveToIndexOffsetDuration;
 
-- (void)initializeView;
-
-- (void)updateContentSize;
-- (void)updateCurrentViewController;
-- (void)updateCurrentIndex;
-
-- (void)initFirstViewController;
-- (void)initLastViewController;
-- (void)initCurrentViewController;
-- (void)loadPrevViewController;
-- (void)loadNextViewController;
-
-- (void)resetScrollToBeginning;
-- (void)resetScrollToEnd;
-- (void)unloadUnusedViewControllers;
-
-- (void)layoutViews;
-
-- (NSUInteger)indexOfPreviousController;
-- (NSUInteger)indexOfNextController;
-
-- (void)scrollToCurrentIndex;
-- (void)notifyDelegateOfCurrentIndexChange;
-- (void)notifyDelegateOfOffsetChange;
-
-- (void)moveToIndex:(NSInteger)index;
-- (void)handleMoveToIndexTick;
-- (CGFloat)easeInOutWithCurrentTime:(CGFloat)t start:(CGFloat)b change:(CGFloat)c duration:(CGFloat)d;
-
 @end
+
 
 @implementation GDIInfinitePageScrollViewController
 
-@synthesize pageViewControllers;
-@synthesize currentIndex;
-@synthesize scrollView = _scrollView;
-@synthesize delegate;
-@synthesize isScrolling;
-
-@synthesize prevIndex = _prevIndex;
-@synthesize viewControllers = _viewControllers;
-@synthesize moveToIndexStartTime = _moveToIndexStartTime;
-@synthesize moveToIndexTimer = _moveToIndexTimer;
-@synthesize moveToIndexOffsetStartValue = _moveToIndexOffsetStartValue;
-@synthesize moveToIndexOffsetDelta = _moveToIndexOffsetDelta;
-@synthesize moveToIndexOffsetDuration = _moveToIndexOffsetDuration;
 
 #pragma mark - View Controller Life Cycle
 
@@ -108,17 +67,46 @@
 - (void)loadView
 {
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
+    self.scrollView.showsVerticalScrollIndicator = NO;
+    self.scrollView.showsHorizontalScrollIndicator = NO;
+    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.view = self.scrollView;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self initializeView];    
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.scrollView removeObserver:self forKeyPath:@"frame"];
+}
+
+
+- (void)initializeView
+{
+    [self configureScrollView];
+    [self updateContentSize];
+    [self scrollToCurrentIndex];
+}
+
+
+- (void)configureScrollView
+{
+    [self.scrollView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
     self.scrollView.minimumZoomScale = 1.f;
     self.scrollView.maximumZoomScale = 1.f;
-    self.scrollView.showsVerticalScrollIndicator = NO;
-    self.scrollView.showsHorizontalScrollIndicator = NO;
-    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [self.scrollView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
 }
 
+
+#pragma mark - KVO Observing
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
@@ -130,36 +118,7 @@
 }
 
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self initializeView];    
-}
-
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    [self.scrollView removeObserver:self forKeyPath:@"frame"];
-    [self.scrollView removeFromSuperview];
-    _scrollView = nil;
-}
-
-
-- (void)initializeView
-{    
-    [self updateContentSize];
-    [self scrollToCurrentIndex];
-}
-
 #pragma mark - Public Methods
-
 
 - (void)setPageViewControllers:(NSArray *)controllers
 {
@@ -174,7 +133,7 @@
     }
     
     self.prevIndex = index;
-    currentIndex = index;
+    self.currentIndex = index;
 
     [self scrollToCurrentIndex];
 }
@@ -218,7 +177,7 @@
 - (void)handleMoveToIndexTick
 {
     // see what our current duration is
-    CGFloat currentTime = fabsf([_moveToIndexStartTime timeIntervalSinceNow]);
+    CGFloat currentTime = fabs([_moveToIndexStartTime timeIntervalSinceNow]);
     
     // stop scrolling if we are past our duration
     if (currentTime >= _moveToIndexOffsetDuration) {
@@ -251,7 +210,6 @@
 
 #pragma mark - View Controller Management
 
-
 - (void)setViewControllers:(NSMutableArray *)viewControllers
 {
     // remove previous
@@ -259,7 +217,7 @@
         [vc.view removeFromSuperview];
     }
     
-    currentIndex = 0;
+    self.currentIndex = 0;
     _viewControllers = [NSMutableArray arrayWithArray:viewControllers];
     
     [self initializeView];
@@ -395,7 +353,6 @@
 
 #pragma mark - Scroll View Management
 
-
 - (void)scrollToCurrentIndex
 {
     self.isScrolling = YES;
@@ -432,19 +389,19 @@
     
     self.currentIndex = index;
     
-    if ([delegate respondsToSelector:@selector(infiniteScrollView:didScrollToRawIndex:)]) {
-        [delegate infiniteScrollView:self didScrollToRawIndex:rawIndex];
+    if ([self.delegate respondsToSelector:@selector(infiniteScrollView:didScrollToRawIndex:)]) {
+        [self.delegate infiniteScrollView:self didScrollToRawIndex:rawIndex];
     }
 }
 
 
 - (void)setCurrentIndex:(NSUInteger)newIndex
 {
-    if (currentIndex == newIndex) {
+    if (_currentIndex == newIndex) {
         return;
     }
-    _prevIndex = currentIndex;
-    currentIndex = newIndex;
+    _prevIndex = _currentIndex;
+    _currentIndex = newIndex;
     [self notifyDelegateOfCurrentIndexChange];
     [self updateCurrentViewController];
 }
@@ -467,40 +424,39 @@
 
 - (void)notifyDelegateOfCurrentIndexChange
 {
-    if ([delegate respondsToSelector:@selector(infiniteScrollView:didScrollToIndex:)]) {
-        [delegate infiniteScrollView:self didScrollToIndex:self.currentIndex];
+    if ([self.delegate respondsToSelector:@selector(infiniteScrollView:didScrollToIndex:)]) {
+        [self.delegate infiniteScrollView:self didScrollToIndex:self.currentIndex];
     }
 }
 
 - (void)notifyDelegateOfOffsetChange
 {
-    if ([delegate respondsToSelector:@selector(infiniteScrollView:didScrollToContentOffset:)]) {
-        [delegate infiniteScrollView:self didScrollToContentOffset:self.scrollView.contentOffset];
+    if ([self.delegate respondsToSelector:@selector(infiniteScrollView:didScrollToContentOffset:)]) {
+        [self.delegate infiniteScrollView:self didScrollToContentOffset:self.scrollView.contentOffset];
     }
 }
 
 - (void)setIsScrolling:(BOOL)scrolling
 {
-    if (isScrolling == scrolling) {
+    if (_isScrolling == scrolling) {
         return;
     }
     
-    isScrolling = scrolling;
+    _isScrolling = scrolling;
     
-    if (isScrolling) {
-        if ([delegate respondsToSelector:@selector(infiniteScrollViewDidBeginScrolling:)]) {
-            [delegate infiniteScrollViewDidBeginScrolling:self];
+    if (_isScrolling) {
+        if ([self.delegate respondsToSelector:@selector(infiniteScrollViewDidBeginScrolling:)]) {
+            [self.delegate infiniteScrollViewDidBeginScrolling:self];
         }
     }
     else {
-        if ([delegate respondsToSelector:@selector(infiniteScrollViewDidEndScrolling:)]) {
-            [delegate infiniteScrollViewDidEndScrolling:self];
+        if ([self.delegate respondsToSelector:@selector(infiniteScrollViewDidEndScrolling:)]) {
+            [self.delegate infiniteScrollViewDidEndScrolling:self];
         }
     }
 }
 
 #pragma mark - UIScrollViewDelegate Methods
-
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {    

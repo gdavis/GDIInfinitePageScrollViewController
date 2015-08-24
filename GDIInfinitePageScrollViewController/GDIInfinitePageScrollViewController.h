@@ -13,7 +13,7 @@
 @interface GDIInfinitePageScrollViewController : UIViewController <UIScrollViewDelegate>
 
 @property (strong, nonatomic) NSArray *pageViewControllers;
-@property (strong, nonatomic, readonly) UIScrollView *scrollView;
+@property (strong, nonatomic, readonly) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) NSObject <GDIInfinitePageScrollViewControllerDelegate> *delegate;
 @property (nonatomic) BOOL isScrolling;
 
